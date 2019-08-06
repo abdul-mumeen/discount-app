@@ -4,12 +4,24 @@ Discount API /discounts endpoint.
 import logging
 import secrets
 import string
+import json
+import os
 from flask import request, json
 from flask_restplus import Resource, fields, abort
 from ..restplus import api
 from ...models.DiscountModel import DiscountModel
 
 log = logging.getLogger(__name__)
+
+dirname = os.path.dirname(__file__)
+filename = os.path.join(dirname, '../../../categories.json')
+
+CATEGORIES_ID = []
+
+with open(filename) as json_file:
+    data = json.load(json_file)
+    CATEGORIES_ID = [category['id'] for category in data['Categories']]
+    print(CATEGORIES_ID)
 
 ns = api.namespace('discounts',
                    description='Adding, retrieving and deleting Discounts')
@@ -29,6 +41,7 @@ discounts_post_request_model = api.model(
         ),
         'category_id':
         fields.Integer(
+            enum=[*CATEGORIES_ID],
             required=True,
             description='ID indicating the category the discount belongs to.'),
     })
@@ -48,6 +61,7 @@ discount_model = api.model(
         ),
         'category_id':
         fields.Integer(
+            enum=CATEGORIES_ID,
             description='ID indicating the category the discount belongs to.'),
         'code':
         fields.String(required=True,
