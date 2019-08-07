@@ -20,8 +20,7 @@ CATEGORIES_ID = []
 
 with open(filename) as json_file:
     data = json.load(json_file)
-    CATEGORIES_ID = [category['id'] for category in data['Categories']]
-    print(CATEGORIES_ID)
+    CATEGORIES_ID = [int(category['id']) for category in data['Categories']]
 
 ns = api.namespace('discounts',
                    description='Adding, retrieving and deleting Discounts')
@@ -41,7 +40,7 @@ discounts_post_request_model = api.model(
         ),
         'category_id':
         fields.Integer(
-            enum=[*CATEGORIES_ID],
+            enum=CATEGORIES_ID,
             required=True,
             description='ID indicating the category the discount belongs to.'),
     })

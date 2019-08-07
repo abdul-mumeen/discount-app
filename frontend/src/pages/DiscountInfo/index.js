@@ -2,6 +2,18 @@ import React from 'react';
 import { fetchDiscountInfo, deleteDiscount } from '../../actions';
 import Page from '../common/Page';
 import { Button, Modal } from 'semantic-ui-react';
+import categories_data from '../../assests/categories.json';
+
+const categories_object = {};
+categories_data.Categories.forEach(category => {
+	categories_object[category.id] = category;
+});
+
+const type = {
+	free_shipping: 'Free Shipping',
+	exact_value: 'Flat Amount',
+	percentage_value: 'Percentage Amount'
+};
 
 /**
  *
@@ -59,10 +71,15 @@ class DiscountInfo extends React.Component {
 								Code:
 								{discount.code}
 							</p>
-							<p>Type: {discount.type_id}</p>
+							<p>Type: {type[discount.type_id]}</p>
 							<p>Value: {discount.value}</p>
 							<p>Minimum Value Applicable: {discount.min_apply_value}</p>
-							<p>Category: {discount.category_id}</p>
+							<p>
+								Category:{' '}
+								{categories_object[discount.category_id]
+									? categories_object[discount.category_id].name
+									: 'Missing'}
+							</p>
 							<p>Date updated {discount.modified_at}</p>
 						</div>
 						<Modal

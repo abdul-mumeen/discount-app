@@ -13,13 +13,13 @@ MYNAME = 'discount'
 app = Flask(MYNAME)
 app.config['SECRET_KEY'] = 'secret!'
 
-# user = os.environ['POSTGRES_USER']
-# password = os.environ['POSTGRES_PASSWORD']
-# db_name = os.environ['POSTGRES_DB']
-# host = os.environ['POSTGRES_HOST']
+user = os.environ['POSTGRES_USER']
+password = os.environ['POSTGRES_PASSWORD']
+db_name = os.environ['POSTGRES_DB']
+host = os.environ['POSTGRES_HOST']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'postgres://abdulmumeen@localhost:5432/discount_app_db'  # f'postgres://{user}:{password}@{host}:5432/{db_name}'
+    'SQLALCHEMY_DATABASE_URI'] = f'postgres://{user}:{password}@{host}:5432/{db_name}'  # 'postgres://abdulmumeen@localhost:5432/discount_app_db'
 db.init_app(app)
 
 CORS(app, resources={r"/api/*": {'origins': '*'}})
