@@ -14,7 +14,7 @@ from ...models.DiscountModel import DiscountModel
 log = logging.getLogger(__name__)
 
 dirname = os.path.dirname(__file__)
-filename = os.path.join(dirname, '../../../categories.json')
+filename = os.path.join(dirname, '../../categories.json')
 
 CATEGORIES_ID = []
 
