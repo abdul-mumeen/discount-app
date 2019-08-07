@@ -4,8 +4,14 @@ import { Table, Menu, Icon, Button } from 'semantic-ui-react';
 import times from 'lodash.times';
 import { fetchAllDiscounts } from '../../actions';
 import Page from '../common/Page';
+import categories_data from '../../assests/categories.json';
 
-const TOTAL_PER_PAGE = 1;
+const categories_object = {};
+categories_data.Categories.forEach(category => {
+	categories_object[category.id] = category;
+});
+
+const TOTAL_PER_PAGE = 5;
 
 /**
  *
@@ -55,6 +61,10 @@ class DiscountsPage extends React.Component {
 		});
 	};
 
+	gotoNew = () => {
+		this.props.history.push('/discounts/new');
+	};
+
 	renderTable() {
 		const { discounts, page, totalPages } = this.state;
 		const startIndex = page * TOTAL_PER_PAGE;
@@ -81,7 +91,11 @@ class DiscountsPage extends React.Component {
 								<Table.Cell>{discount.type_id}</Table.Cell>
 								<Table.Cell>{discount.value}</Table.Cell>
 								<Table.Cell>{discount.min_apply_value}</Table.Cell>
-								<Table.Cell>{discount.category_id}</Table.Cell>
+								<Table.Cell>
+									{categories_object[discount.category_id]
+										? categories_object[discount.category_id].name
+										: 'missing'}
+								</Table.Cell>
 								<Table.Cell>{discount.modified_at}</Table.Cell>
 							</Table.Row>
 						))}
@@ -122,7 +136,9 @@ class DiscountsPage extends React.Component {
 		const { discounts } = this.state;
 		return (
 			<Page title="Discounts">
-				<Button positive>New Discount</Button>
+				<Button positive onClick={this.gotoNew}>
+					New Discount
+				</Button>
 				{discounts.length > 0 ? (
 					this.renderTable()
 				) : (

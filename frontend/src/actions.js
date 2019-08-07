@@ -40,7 +40,7 @@ export const createDiscount = async (
 		category_id: categoryId
 	};
 	try {
-		const response = await discountAppServer.post('/discounts', payload);
+		const response = await discountAppServer.post('/discounts/', payload);
 		return response.data;
 	} catch (err) {
 		throw new Error(err.message);

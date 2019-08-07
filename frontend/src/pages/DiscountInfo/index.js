@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { fetchDiscountInfo } from '../../actions';
+import { fetchDiscountInfo, deleteDiscount } from '../../actions';
+import Page from '../common/Page';
+import { Button, Modal } from 'semantic-ui-react';
 
 /**
  *
@@ -9,30 +10,86 @@ import { fetchDiscountInfo } from '../../actions';
  */
 class DiscountInfo extends React.Component {
 	state = {
-		discount: {}
+		discount: {},
+		showModal: false
 	};
 
 	async componentDidMount() {
 		const {
 			match: { params }
 		} = this.props;
-		const data = await fetchDiscountInfo(params.discountId);
-		this.setState({ discount: data });
+		try {
+			const data = await fetchDiscountInfo(params.discountId);
+			this.setState({ discount: data });
+		} catch {
+			this.setState({ discount: null });
+		}
 	}
 
+	showWarning = () => {
+		this.setState({ showModal: true });
+	};
+
+	closeModal = () => {
+		this.setState({ showModal: false });
+	};
+
+	deleteDiscountDetails = async () => {
+		try {
+			await deleteDiscount(this.state.discount.id);
+			alert('Successfully deleted!');
+			this.props.history.push('/discounts/');
+		} catch {
+			alert('Error has occured, try again!');
+		}
+	};
+
 	render() {
-		const { discount } = this.state;
+		const { discount, showModal } = this.state;
 		return (
-			<div>
-				<div>
-					<Link to={`/discounts/${discount.id}`}>{discount.code}</Link>
-				</div>
-				<div>{discount.type_id}</div>
-				<div>{discount.value}</div>
-				<div>{discount.min_apply_value}</div>
-				<div>{discount.category_id}</div>
-				<div>{discount.modified_at}</div>
-			</div>
+			<Page title="Discount">
+				{discount ? (
+					<React.Fragment>
+						<Button negative onClick={this.showWarning}>
+							Delete discount
+						</Button>
+						<div>
+							<p>
+								<br />
+								Code:
+								{discount.code}
+							</p>
+							<p>Type: {discount.type_id}</p>
+							<p>Value: {discount.value}</p>
+							<p>Minimum Value Applicable: {discount.min_apply_value}</p>
+							<p>Category: {discount.category_id}</p>
+							<p>Date updated {discount.modified_at}</p>
+						</div>
+						<Modal
+							open={showModal}
+							closeOnEscape={true}
+							closeOnDimmerClick={true}
+						>
+							<Modal.Header>Warning!</Modal.Header>
+							<Modal.Content>
+								<p>Are you sure you want to delete this Discount?</p>
+							</Modal.Content>
+							<Modal.Actions>
+								<Button onClick={this.closeModal} positive>
+									No
+								</Button>
+								<Button onClick={this.deleteDiscountDetails} negative>
+									Yes
+								</Button>
+							</Modal.Actions>
+						</Modal>
+					</React.Fragment>
+				) : (
+					<div>
+						<h3>No record found!</h3>
+					</div>
+				)}
+			</Page>
 		);
 	}
 }

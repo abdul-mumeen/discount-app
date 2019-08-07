@@ -166,4 +166,4 @@ class DiscountsResource(Resource):
             log.exception(e)
             abort(500, 'Error creating discount')
 
-        return discount.to_dict(), 201
+        return discount.to_dict(), 201, {'Access-Control-Allow-Origin': '*'}
