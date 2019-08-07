@@ -8,7 +8,10 @@ WORKDIR /backend
 
 COPY ./backend /backend/
 
+# RUN apt-get -y install postgresql-client
 RUN pip install -r requirements.txt
+
+EXPOSE 5000
 
 # Start processes
 CMD ["flask", "run", "--host=0.0.0.0"]

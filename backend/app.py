@@ -12,10 +12,16 @@ from .restapi.endpoints.discounts import ns as discounts_ns
 MYNAME = 'discount'
 app = Flask(MYNAME)
 app.config['SECRET_KEY'] = 'secret!'
+
+# user = os.environ['POSTGRES_USER']
+# password = os.environ['POSTGRES_PASSWORD']
+# db_name = os.environ['POSTGRES_DB']
+# host = os.environ['POSTGRES_HOST']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres@0.0.0.0:5432/postgres'  # 'postgres://abdulmumeen@localhost:5432/discount_app_db'
+    'SQLALCHEMY_DATABASE_URI'] = 'postgres://abdulmumeen@localhost:5432/discount_app_db'  # f'postgres://{user}:{password}@{host}:5432/{db_name}'
 db.init_app(app)
+
 CORS(app, resources={r"/api/*": {'origins': '*'}})
 
 migrate = Migrate(app=app, db=db, discount=DiscountModel)

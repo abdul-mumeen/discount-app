@@ -3,6 +3,9 @@ discount-app-env
 *.pyc
 __pycache__/
 
+.env
+
+.vscode
 
 # frontend
 # dependencies
