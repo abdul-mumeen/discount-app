@@ -1,0 +1,15 @@
+FROM nginx:1.13.9-alpine
+
+# install node and npm
+RUN apk add --update nodejs nodejs-npm
+
+# set work directory and build js
+WORKDIR /frontend
+
+COPY ./frontend /frontend
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
